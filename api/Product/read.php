@@ -11,7 +11,7 @@
     $product = new Product($db);
 
     $stmt = $product->read();
-    $num = $stmt->rowCount();
+    $num = $stmt->num_rows;
 
     if($num > 0) {
         $products_arr = array();
@@ -29,10 +29,16 @@
             );
             array_push($products_arr['records'], $product_item);
         }
-        
+
         http_response_code(200);
 
-        echo json_decode($products_arr);
+        echo json_encode($products_arr);
+
+    } else {
+        
+        http_response_code(404);
+
+        echo json_encode(array("message" => "No products found."));
 
     }
     
