@@ -11,6 +11,9 @@
         th, td {
             padding: 5px 10px;
         }
+        a:visited, a, a:hover, a:active {
+            color: blue;
+        }
 
     </style>
 </head>
@@ -21,6 +24,7 @@
     <table class="table" cellspacing="0">
         <thead>
             <tr>
+                <th scope="col">S/N</th>
                 <th scope="col">Id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Description</th>
@@ -35,5 +39,37 @@
     </table>
 
     <script src="app.js"></script>
+    <script>
+
+        const productList = document.querySelector('#data');
+
+        window.onload = function() {
+            fetch(`${apiUrl}/product/read.php`)
+                .then(res => res.json())
+                .then(data => {
+                    var sn = 1;
+                    data.records.forEach(p => {
+                        productListData = document.createElement('tr');
+                        productListData.innerHTML = `
+                            <td>${sn}</th>
+                            <td>${p.id}</th>
+                            <td>${p.name}</td>
+                            <td>${p.description}</td>
+                            <td>${p.price}</td>
+                            <td>${p.category_name}</td>
+                            <td>
+                                <b><a href="edit.php?id=${p.id}">edit</a></b> |
+                                <b><a href="#" onclick="deleteProduct(${p.id})">delete</a></b>
+                            </td>
+                        `;
+                        productList.appendChild(productListData);
+                        sn++;
+                    })
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    </script>
 </body>
 </html>
