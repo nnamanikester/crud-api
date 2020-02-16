@@ -73,4 +73,33 @@
 
         }
 
+        public function update()
+        {
+            $query = "UPDATE " . $this->table_name . " SET name = ?, price = ?, description = ?, category_id = ? WHERE id = ?";
+
+            $stmt = $this->conn->prepare($query);
+
+            $this->name = htmlspecialchars(strip_tags($this->name));
+            $this->price = htmlspecialchars(strip_tags($this->price));
+            $this->description = htmlspecialchars(strip_tags($this->description));
+            $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+            $this->id = htmlspecialchars(strip_tags($this->id));
+
+            // bind new values
+            $stmt->bind_param("ssss", $name, $price, $description, $category_id, $id);
+
+            $name = $this->name;
+            $price = $this->price;
+            $description = $this->description;
+            $category_id = $this->category_id;
+            $id = $this->id;
+            
+            if($stmt->execute()){
+                return true;
+            }
+
+            return false;
+        }
+        
+
     }
