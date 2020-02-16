@@ -160,9 +160,8 @@
 
             $query = "SELECT COUNT(*) as total_rows FROM " . $this->table_name . "";
 
-            $stmt = $this->conn->prepare( $query );
-            $stmt->execute();
-            
+            $stmt = $this->conn->query( $query );
+
             $row = $stmt->fetch_assoc();
 
             return $row['total_rows'];
