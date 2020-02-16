@@ -101,5 +101,43 @@
             return false;
         }
         
+        public function delete() 
+        {
+
+            $this->id = htmlspecialchars(strip_tags($this->id));
+            $query = "DELETE FROM " . $this->table_name . " WHERE id = {$this->id}";
+
+            $stmt = $this->conn->query($query);
+
+            if($stmt){
+                return true;
+            }
+
+            return false;
+            
+        }
+
+        public function search($keywords) 
+        {
+
+            $query = "SELECT c.name as category_name, p.id, p.name, p.description, p.price, p.category_id, p.created FROM " . $this->table_name . " p LEFT JOIN categories c ON p.category_id = c.id
+			WHERE p.name LIKE ? OR p.description LIKE ? OR c.name LIKE ? ORDER BY p.created DESC";
+            
+            $stmt = $this->conn->prepare($query);
+            
+            // sanitize
+            $keywords = htmlspecialchars(strip_tags($keywords));
+            $keywords = "%{$keywords}%";
+
+            $stmt->bind_param("sss", $a, $b, $c);
+            $a = $keywords;
+            $b = $keywords;
+            $c = $keywords;
+
+            $stmt->execute();
+
+            return $stmt;
+
+        }
 
     }
